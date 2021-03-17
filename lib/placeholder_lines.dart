@@ -76,7 +76,7 @@ class _PlaceholderLinesState extends State<PlaceholderLines>
   Animation<RelativeRect>? _animation;
   late Map<int, double> _seeds;
 
-  double get _randomSeed => Random().nextDouble();
+  static double _getRandomSeed() => Random().nextDouble();
 
   bool _disposed = false;
 
@@ -100,7 +100,7 @@ class _PlaceholderLinesState extends State<PlaceholderLines>
   @override
   void initState() {
     _seeds = List.filled(widget.count, .0).asMap().map((index, _) {
-      return MapEntry(index, _randomSeed);
+      return MapEntry(index, _getRandomSeed());
     });
 
     _animationController = AnimationController(
@@ -174,7 +174,8 @@ class _PlaceholderLinesState extends State<PlaceholderLines>
   List<Widget> _buildLines(BoxConstraints constraints) {
     List<Widget> list = [];
     for (var i = 0; i < widget.count; i++) {
-      double _random = widget.rebuildOnStateChange ? _randomSeed : _seeds[i]!;
+      double _random =
+          widget.rebuildOnStateChange ? _getRandomSeed() : _seeds[i]!;
       double _opacity = (widget.maxOpacity -
               ((widget.maxOpacity - widget.minOpacity) * _random))
           .abs();
