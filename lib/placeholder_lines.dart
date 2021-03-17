@@ -78,13 +78,10 @@ class _PlaceholderLinesState extends State<PlaceholderLines>
 
   static double _getRandomSeed() => Random().nextDouble();
 
-  bool _disposed = false;
-
   @override
   void didUpdateWidget(PlaceholderLines oldWidget) {
     if (oldWidget.animate != widget.animate) {
       if (widget.animate) {
-        // _setupAnimation();
         _animationController.forward();
       } else {
         // if(_animationController != null) {
@@ -109,17 +106,15 @@ class _PlaceholderLinesState extends State<PlaceholderLines>
     );
 
     WidgetsBinding.instance!.addPostFrameCallback(_setupAnimation);
-    // if(widget.animate) {
-    // }
     super.initState();
   }
 
   void _setupAnimation([Duration? _]) {
-    if (!_disposed) {
-      Future.delayed(Duration(seconds: 1)).then(
-        (__) => _setupAnimation(_),
-      );
-    }
+    if (!mounted) return;
+
+    Future.delayed(Duration(seconds: 1)).then(
+      (__) => _setupAnimation(_),
+    );
 
     final RenderBox renderO = context.findRenderObject() as RenderBox;
     final BoxConstraints constraints = renderO.constraints;
@@ -253,7 +248,6 @@ class _PlaceholderLinesState extends State<PlaceholderLines>
 
   @override
   void dispose() {
-    _disposed = true;
     _animationController.dispose();
     super.dispose();
   }
